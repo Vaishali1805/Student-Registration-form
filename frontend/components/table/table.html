@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student's Table</title>
+    <!-- custom css -->
+    <link rel="stylesheet" href="table.css">
+    <!-- bootstrap css -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- custom js -->
+     <script src="../../config/config.js"></script>
+    <script src="./table.js" defer></script>
+</head>
+
+<body>
+    <h1 id="heading">Registered Students</h1>
+    <div id="btnDiv">
+        <button id="deleteBtn">Delete</button>
+        <button id="registerBtn">Register New Students</button>
+    </div>
+
+    <div id="table_container">
+        <table class="table table-hover table-bordered caption-top" id="studentTable">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="mainCheckBox" name="select"></th>
+                    <th>Serial No.</th>
+                    <th>Profile</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email address</th>
+                    <th>Contact No.</th>
+                    <th>Date of Birth</th>
+                    <th>Student Id</th>
+                    <th>Gender</th>
+                    <th>Street Address</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>City</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="rowContainer"></tbody>
+        </table>
+    </div>
+
+    <!-- Confirmation Popup -->
+    <div id="confirmPopup" class="popup">
+        <div class="popup-content">
+            <p>Are you sure you want to delete this student?</p>
+            <button id="confirmDelete">Yes</button>
+            <button id="cancelDelete">No</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

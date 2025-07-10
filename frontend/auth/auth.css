@@ -1,0 +1,137 @@
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.h-custom {
+    height: calc(100% - 73px);
+}
+
+@media (max-width: 450px) {
+    .h-custom {
+        height: 100%;
+    }
+}
+
+.form-outline .form-control.active~.form-label {
+    transform: scale(0.8) translateY(-1rem);
+    color: #495057;
+}
+
+.heading {
+    text-align: center;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+}
+
+.eye {
+    cursor: pointer;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin: 0.5rem;
+}
+
+.hide {
+    display: none;
+}
+
+#error {
+    text-align: center;
+}
+
+.toastDiv::before {
+    position: absolute;
+    content: "";
+    height: 5px;
+    width: 100%;
+    background-color: var(--barColor, green);
+    bottom: 0px;
+    left: 0px;
+    animation: progress 1.5s linear forwards;
+}
+
+@keyframes progress {
+    100% {
+        width: 0%;
+    }
+}
+
+.myToast {
+    position: fixed;
+    top: 30px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+    border: 2px black;
+    border-radius: 4px;
+    padding: 16px 17px;
+    animation: show_toast 0.3s ease forwards;
+    /* background-color: #f1f1f1; */
+}
+
+@keyframes show_toast {
+    0%{
+        transform: translateX(100%);
+    }
+    40%{
+        transform: translateX(-5%);
+    }
+    80%{
+        transform: translateX(0%);
+    }
+    100%{
+        transform: translateX(-10px);
+    }
+}
+
+.myToast.hide {
+    animation: hide_toast 0.3s ease forwards;
+}
+
+@keyframes hide_toast {
+    0%{
+        transform: translateX(-10px);
+    }
+    40%{
+        transform: translateX(0%);
+    }
+    80%{
+        transform: translateX(-5%);
+    }
+    100%{
+        transform: translateX(100%);
+    }
+}
+
+.myToast i:last-child {
+    font-size: 1.20rem;
+    color: #aeb0d7;
+    cursor: pointer;
+}
+
+.myToast i:last-child:hover {
+    color: rgb(71, 71, 71);
+}
+
+.toastDiv {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-evenly;
+    align-items: center;
+    i {
+        font-size: 1.75rem;
+        color: var(--iconColor, green);
+    }
+
+    span {
+        font-size: 1.07rem;
+    }
+}

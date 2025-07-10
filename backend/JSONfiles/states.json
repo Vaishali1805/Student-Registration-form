@@ -1,0 +1,176 @@
+[
+    {
+        "id": 3903,
+        "name": "Victoria",
+        "code": "VIC",
+        "countryId": 1
+    },
+    {
+        "id": 3904,
+        "name": "South Australia",
+        "code": "SA",
+        "countryId": 1
+    },
+    {
+        "id": 3905,
+        "name": "Queensland",
+        "code": "QLD",
+        "countryId": 1
+    },
+    {
+        "id": 3906,
+        "name": "Western Australia",
+        "code": "WA",
+        "countryId": 1
+    },
+    {
+        "id": 3907,
+        "name": "Australian Capital Territory",
+        "code": "ACT",
+        "countryId": 1
+    },
+    {
+        "id": 3908,
+        "name": "Tasmania",
+        "code": "TAS",
+        "countryId": 1
+    },
+    {
+        "id": 3909,
+        "name": "New South Wales",
+        "code": "NSW",
+        "countryId": 1
+    },
+    {
+        "id": 3910,
+        "name": "Northern Territory",
+        "code": "NT",
+        "countryId": 1
+    },
+    {
+        "id": 866,
+        "name": "Ontario",
+        "code": "ON",
+        "countryId": 2
+    },
+    {
+        "id": 867,
+        "name": "Manitoba",
+        "code": "MB",
+        "countryId": 2
+    },
+    {
+        "id": 868,
+        "name": "New Brunswick",
+        "code": "NB",
+        "countryId": 2
+    },
+    {
+        "id": 869,
+        "name": "Yukon",
+        "code": "YT",
+        "countryId": 2
+    },
+    {
+        "id": 870,
+        "name": "Saskatchewan",
+        "code": "SK",
+        "countryId": 2
+    },
+    {
+        "id": 871,
+        "name": "Prince Edward Island",
+        "code": "PE",
+        "countryId": 2
+    },
+    {
+        "id": 872,
+        "name": "Alberta",
+        "code": "AB",
+        "countryId": 2
+    },
+    {
+        "id": 873,
+        "name": "Quebec",
+        "code": "QC",
+        "countryId": 2
+    },
+    {
+        "id": 874,
+        "name": "Nova Scotia",
+        "code": "NS",
+        "countryId": 2
+    },
+    {
+        "id": 875,
+        "name": "British Columbia",
+        "code": "BC",
+        "countryId": 2
+    },
+    {
+        "id": 876,
+        "name": "Nunavut",
+        "code": "NU",
+        "countryId": 2
+    },
+    {
+        "id": 877,
+        "name": "Newfoundland and Labrador",
+        "code": "NL",
+        "countryId": 2
+    },
+    {
+        "id": 878,
+        "name": "Northwest Territories",
+        "code": "NT",
+        "countryId": 2
+    },
+    {
+        "id": 4917,
+        "name": "La Colle",
+        "code": "CL",
+        "countryId": 3
+    },
+    {
+        "id": 4918,
+        "name": "La Condamine",
+        "code": "CO",
+        "countryId": 3
+    },
+    {
+        "id": 4919,
+        "name": "Moneghetti",
+        "code": "MG",
+        "countryId": 3
+    },
+    {
+        "id": 3911,
+        "name": "Vavaʻu",
+        "code": "05",
+        "countryId": 4
+    },
+    {
+        "id": 3912,
+        "name": "Tongatapu",
+        "code": "04",
+        "countryId": 4
+    },
+    {
+        "id": 3913,
+        "name": "Haʻapai",
+        "code": "02",
+        "countryId": 4
+    },
+    {
+        "id": 3914,
+        "name": "Niuas",
+        "code": "03",
+        "countryId": 4
+    },
+    {
+        "id": 3915,
+        "name": "ʻEua",
+        "code": "01",
+        "countryId": 4
+    }
+]

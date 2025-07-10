@@ -1,0 +1,140 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    padding-top: 5px;
+    text-align: center;
+}
+
+fieldset.scheduler-border {
+    border: 1px groove #a09e9e !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px #000;
+    margin-top: 30px !important;
+}
+
+legend.scheduler-border {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width: auto;
+    padding: 0 10px;
+    border-bottom: none;
+    margin-top: -15px;
+    background-color: white;
+    color: black;
+}
+
+fieldset.scheduler-border-2 {
+    border: 1px groove #c9c4c4 !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px #000;
+    margin-top: 30px !important;
+}
+
+legend.scheduler-border-2 {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width: auto;
+    padding: 0 10px;
+    border-bottom: none;
+    margin-top: -15px;
+    background-color: white;
+    color: black;
+}
+
+#main-div {
+    background-color: white;
+    margin: auto;
+    width: 50vw;
+    /* height: 80vh; */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+    transition: box-shadow 0.3s
+}
+
+#main-div:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.35);
+}
+
+#parentInfo,
+.addressInfo,
+.contactNo-n-dob {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.dob {
+    margin: auto;
+}
+
+.error_msg {
+    color: red;
+}
+
+#inputProfileBtn:hover {
+    background-color: #9c969657;
+}
+
+.setImg {
+    width: 10rem;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.crossImg {
+    width: 0.8rem;
+    height: auto;
+    margin-bottom: 3px;
+    /* max-height: 20px; */
+    margin-left: auto;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.fileContainer {
+    position: relative;
+    margin: 10px;
+    width: 15vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-sizing: border-box;     /*Allow to include the padding and border in element's total width and height*/
+    padding: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.fileContainer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+input[type="radio"] {
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+    width: 14px;
+    height: 14px;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name": "Australia",
+        "code": "AU"
+    },
+    {
+        "id": 2,
+        "name": "Canada",
+        "code": "CA"
+    },
+    {
+        "id": 3,
+        "name": "Monaco",
+        "code": "MC"
+    },
+    {
+        "id": 4,
+        "name": "Tonga",
+        "code": "TO"
+    }
+]
