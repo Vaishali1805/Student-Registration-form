@@ -320,6 +320,7 @@ function resetDropdown(dropdown, label) {
 
 async function fetchAndPopulate(type, params = {}) {
   try {
+    console.log("am in");
     params.type = type;
     let query = new URLSearchParams(params).toString();
     // const url = `http://localhost:5000/user/get/locationData?${query}`;

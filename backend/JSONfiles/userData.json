@@ -1,0 +1,32 @@
+{
+  "1757066443869": {
+    "firstName": "sdgdf",
+    "lastName": "ghghfhfhgh",
+    "email": "fghf@gmail.com",
+    "contactNo": "32534343",
+    "dateOfBirth": "2025-08-31",
+    "studentId": 45,
+    "gender": "Female",
+    "address": "dfgfhgfg",
+    "country": 1,
+    "state": 3910,
+    "city": 5027,
+    "profilePath": "uploads\\1757066443763_girl.jpg",
+    "id": 1757066443869
+  },
+  "1757066564517": {
+    "firstName": "tyhgf",
+    "lastName": "fghfgh",
+    "email": "gfhfg@GFG.dlf",
+    "contactNo": "42334234",
+    "dateOfBirth": "2025-08-31",
+    "studentId": 43,
+    "gender": "Female",
+    "address": "rfdg",
+    "country": 2,
+    "state": 875,
+    "city": 16302,
+    "profilePath": "uploads\\1757066564139_random_people.jpg",
+    "id": 1757066564517
+  }
+}

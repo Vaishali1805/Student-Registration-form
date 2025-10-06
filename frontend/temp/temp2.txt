@@ -1,0 +1,337 @@
+<!-- Password -->
+<div class="form-outline border d-flex" id="passwordDiv">
+  <input type="password" id="password" class="form-control form-control-lg" />
+  <label class="form-label" for="password">Password</label>
+  <img src="../assets/icons/eyeHide.svg" id="eye1" class="eye toggle-password" data-input="password" alt="Toggle Password">
+</div>
+
+<!-- Confirm Password -->
+<div class="form-outline border d-flex">
+  <input type="password" id="confrimPassword" class="form-control form-control-lg" />
+  <label class="form-label" for="confrimPassword">Confirm Password</label>
+  <img src="../assets/icons/eyeHide.svg" id="eye2" class="eye toggle-password" data-input="confrimPassword" alt="Toggle Password">
+</div>
+
+document.querySelectorAll('.toggle-password').forEach(eyeIcon => {
+  eyeIcon.addEventListener('click', () => {
+    const inputId = eyeIcon.getAttribute('data-input');
+    const input = document.getElementById(inputId);
+    const isVisible = input.type === 'text';
+
+    input.type = isVisible ? 'password' : 'text';
+    eyeIcon.src = isVisible 
+      ? '../assets/icons/eyeHide.svg' 
+      : '../assets/icons/eyeShow.svg';
+  });
+});
+
+// function getUserRole() {}
+
+// Promise.all([getUserData()])
+//   .then(() => getUserRole())
+//   .catch((err) => console.log("Error: ", err));
+
+import fs from 'fs';
+import readline from 'readline';
+import path from 'path';
+
+export const deleteStudentRecordsStream = async (req, res) => {
+  try {
+    const { studentIds } = req.body;
+    if (!studentIds || studentIds.length === 0) {
+      return res.status(400).json({ message: "No IDs provided", success: false });
+    }
+
+    const inputPath = path.join(__dirname, 'userData.ndjson');
+    const tempPath = path.join(__dirname, 'tempUserData.ndjson');
+
+    const inputStream = fs.createReadStream(inputPath);
+    const outputStream = fs.createWriteStream(tempPath);
+
+    const rl = readline.createInterface({
+      input: inputStream,
+      crlfDelay: Infinity,
+    });
+
+    rl.on('line', (line) => {
+      try {
+        const student = JSON.parse(line);
+        if (!studentIds.includes(student.id)) {
+          outputStream.write(line + '\n'); // Only write if not being deleted
+        }
+      } catch (err) {
+        console.error("Invalid JSON line skipped:", line);
+      }
+    });
+
+    rl.on('close', () => {
+      outputStream.end();
+      fs.renameSync(tempPath, inputPath); // Replace original file
+      res.json({ message: "Records deleted using stream", success: true });
+    });
+
+  } catch (err) {
+    console.error("Stream deletion error:", err);
+    res.status(500).json({ message: "Error during stream deletion", success: false });
+  }
+};
+
+
+import fs from 'fs';
+import readline from 'readline';
+import path from 'path';
+
+export const editFormDataStream = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const file = req.file;
+    const editedData = req.body;
+
+    if (!id || !editedData) {
+      return res.status(400).json({ message: "Missing ID or edited data", success: false });
+    }
+
+    const inputPath = path.join(__dirname, 'userData.ndjson');
+    const tempPath = path.join(__dirname, 'tempUserData.ndjson');
+
+    const inputStream = fs.createReadStream(inputPath);
+    const outputStream = fs.createWriteStream(tempPath);
+    const rl = readline.createInterface({
+      input: inputStream,
+      crlfDelay: Infinity,
+    });
+
+    let found = false;
+
+    rl.on('line', (line) => {
+      try {
+        const student = JSON.parse(line);
+
+        if (student.id == id) {
+          found = true;
+          const updatedStudent = {
+            ...student,
+            ...editedData,
+            profile: file ? file : student.profile
+          };
+          outputStream.write(JSON.stringify(updatedStudent) + '\n');
+        } else {
+          outputStream.write(line + '\n');
+        }
+
+      } catch (err) {
+        console.error("Invalid line skipped:", line);
+      }
+    });
+
+    rl.on('close', () => {
+      outputStream.end();
+      fs.renameSync(tempPath, inputPath);
+
+      if (found) {
+        res.json({ message: "Student updated successfully (stream)", success: true });
+      } else {
+        res.status(404).json({ message: "Student not found", success: false });
+      }
+    });
+
+  } catch (error) {
+    console.error("Error during editing with stream:", error);
+    res.status(500).json({ message: "Something went wrong", success: false });
+  }
+};
+
+
+await appendDataToNDJSON('userData.ndjson', data);
+import fs from 'fs';
+import path from 'path';
+
+const appendDataToNDJSON = async (filename, data) => {
+    const filePath = path.join(__dirname, filename);
+    const stream = fs.createWriteStream(filePath, { flags: 'a' }); // 'a' for append
+    return new Promise((resolve, reject) => {
+        stream.write(JSON.stringify(data) + '\n', 'utf8', (err) => {
+            if (err) reject(err);
+            else resolve();
+        });
+    });
+};
+
+
+//read line by line:
+import readline from 'readline';
+
+const readNDJSON = async (filename) => {
+    const filePath = path.join(__dirname, filename);
+    const fileStream = fs.createReadStream(filePath);
+
+    const rl = readline.createInterface({
+        input: fileStream,
+        crlfDelay: Infinity
+    });
+
+    const result = [];
+    for await (const line of rl) {
+        if (line.trim()) {
+            result.push(JSON.parse(line));
+        }
+    }
+
+    return result;
+};
+
+import fs from 'fs';
+import path from 'path';
+
+export const submitFormData = async (req, res) => {
+    try {
+        const { formData } = req.body;
+        const data = JSON.parse(formData);
+
+        if (!data) {
+            return res.status(400).json({ message: "Data not Found", success: false });
+        }
+
+        data.profile = req.file ? req.file : null;
+        data.id = Date.now() + Math.floor(Math.random() * 1000);
+
+        const filePath = path.join(__dirname, 'userData.ndjson');
+        
+        // NDJSON format: each line is one JSON object
+        const line = JSON.stringify(data) + '\n';
+
+        fs.appendFile(filePath, line, 'utf8', (err) => {
+            if (err) {
+                console.log("Write Error: ", err);
+                return res.status(500).json({ message: "Internal Server Error", success: false });
+            }
+            res.json({ message: "Data submitted Successfully", success: true });
+        });
+
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).json({ message: "Something went wrong", success: false });
+    }
+};
+
+const readNDJSON = async (filename) => {
+    const filePath = path.join(__dirname, filename);
+    const stream = fs.createReadStream(filePath, { encoding: 'utf-8' });
+    const readline = require('readline');
+
+    const rl = readline.createInterface({
+        input: stream,
+        crlfDelay: Infinity
+    });
+
+    const data = [];
+
+    for await (const line of rl) {
+        if (line.trim()) {
+            data.push(JSON.parse(line));
+        }
+    }
+
+    return data;
+};
+
+const readNDJSON = async (filename) => {
+    const stream = fs.createReadStream(filename);
+    stream.on('data',function(chunk) {
+        console.log("chunks: ",chunk.toString());
+    })
+    stream.on('end',() => console.log("done Reading chunks"));
+}
+
+//append in ndjson file
+export const submitFormData = async (req, res) => {
+    try {
+        const { formData } = req.body;
+        const data = JSON.parse(formData);
+        if (!data) {
+            return res.status(400).json({ message: "Data not Found", success: false });
+        }
+        data.profile = req.file ? req.file : null;
+        data.id = Date.now() + Math.floor(Math.random() * 1000);
+
+        const filePath = path.join(__dirname, 'userData.ndjson');
+        const line = JSON.stringify(data) + '\n';
+
+        fs.appendFile(filePath, line, 'utf8', (err) => {
+            if (err) {
+                console.log("Write Error: ", err);
+                return res.status(500).json({ message: "Internal Server Error", success: false });
+            }
+            res.json({ message: "Data submitted Successfully", success: true });
+        });
+
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).json({ message: "Something went wrong", success: false });
+    }
+};
+
+
+
+export const verifyToken = (req, res, next) => {
+    // Extract token from Authorization header
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Expecting "Bearer <token>"
+
+    // Check if token is present
+    if (!token) {
+        return res.status(401).json({
+            message: 'Access denied. No token provided.',
+            success: false,
+        });
+    }
+
+    try {
+        // Verify token
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+        // Attach decoded payload to request object
+        req.user = decoded; // Payload from createToken (e.g., { id, name, email, role })
+        next(); // Proceed to the next middleware or route handler
+    } catch (error) {
+        console.log("Token verification error:", error);
+        return res.status(403).json({
+            message: 'Invalid or expired token.',
+            success: false,
+        });
+    }
+};
+
+
+import jwt from 'jsonwebtoken';
+
+export const verifyToken = (req, res, next) => {
+    // Get token from cookie
+    const token = req.cookies.token;
+
+    // Check if token exists
+    if (!token) {
+        return res.status(401).json({
+            message: 'Access denied. No token provided.',
+            success: false,
+        });
+    }
+
+    try {
+        // Verify token
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+        req.user = decoded; // Attach decoded payload (e.g., { id, name, email, role }) to req
+        next(); // Proceed to the next middleware or route handler
+    } catch (error) {
+        console.log("Token verification error:", error);
+        if (error.name === 'TokenExpiredError') {
+            return res.status(403).json({
+                message: 'Token has expired. Please log in again.',
+                success: false,
+            });
+        }
+        return res.status(403).json({
+            message: 'Invalid token.',
+            success: false,
+        });
+    }
+};

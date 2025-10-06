@@ -1,0 +1,940 @@
+npx live-server --port=5500 --no-browser
+
+//call from HTML
+// fields.forEach(field => {
+//     const eventType = field === 'studentName' || field === 'confirmPassword' ? 'blur' : 'input';
+//     elements[field].addEventListener(eventType, () => handleFieldValidation(field));
+// });
+--before and after
+export const getUserData = async (req,res) => {
+    const data = await readJsonFile('registeredUsers.json');
+    let arr = [];
+    for (let key in data){
+        const {id,password,...rest} = data[key];
+        arr.push(rest);
+    }
+    res.json(arr);
+}
+
+export const getUserData = async (req, res) => {
+    const data = await readJsonFile('registeredUsers.json');
+    const arr = Object.values(data).map(({ name, email }) => ({ name, email }));
+    res.json(arr);
+};
+advance and beginner
+// for (let key in currentData) {
+    //   if (currentData[key] !== oldData[key]) {
+    //     updatedData.append(key, currentData[key]);
+    //   }
+    // }  //or    object.entries convert the obj in array
+    Object.entries(currentData).forEach(([key, value]) => {
+      if (value !== oldData[key]) updatedData.append(key, value);
+    });
+
+--before and after
+// const dataArr = Object.values(data);
+        // dataArr.map(user => {
+        //     if (user.email === email) {
+        //         userId = user.id;
+        //         userExists = true;
+        //     }
+        // })       
+        const user = Object.values(data).find(user => user.email === email);
+        const userExists = Object.values(data).some(user => user.email === newUser.email);
+
+import fs from 'fs/promises';
+import path from 'path';
+import { readJsonFile } from '../utils/readJsonFile.js'; // assuming this is your custom function
+
+export const editFormData = async (req, res) => {
+    try {
+        const { id } = req.query;
+        const editedFields = req.body;
+        const profileFile = req.file;
+
+        if (!id || !editedFields) {
+            return res.status(400).json({ message: "Missing ID or data", success: false });
+        }
+
+        const filePath = path.resolve('userData.json');
+        let studentsData = await readJsonFile(filePath);
+
+        const studentIndex = studentsData.findIndex(student => String(student.id) === String(id));
+        if (studentIndex === -1) {
+            return res.status(404).json({ message: "Student not found", success: false });
+        }
+
+        const currentStudent = studentsData[studentIndex];
+
+        const updatedStudent = {
+            ...currentStudent,
+            ...editedFields,
+            profile: profileFile || currentStudent.profile
+        };
+
+        studentsData[studentIndex] = updatedStudent;
+
+        await fs.writeFile(filePath, JSON.stringify(studentsData, null, 2));
+
+        res.status(200).json({ message: "Data edited successfully", success: true });
+    } catch (error) {
+        console.error("Error editing student records:", error);
+        res.status(500).json({ message: "An error occurred while editing data", success: false });
+    }
+};
+
+
+🚀 ~ deleteManyStudentRecords ~ req.body.obj: { studentIds: [ 86 ] }
+🚀 ~ deleteManyStudentRecords ~ req.body.obj: { studentIds: [ '23', '86' ] }
+
+{
+    "firstName": "ewfhjsbv",
+    "lastName": "kkjdbfj",
+    "email": "dfsvgnbn@hsdbf.cib",
+    "contactNo": "23867286312",
+    "dateOfBirth": "2025-04-11",
+    "studentId": "23",
+    "gender": "Male",
+    "address": "hrvgfewhjev",
+    "country": "2",
+    "state": "866",
+    "city": "16157",
+    "profile": {
+        "fieldname": "profile",
+        "originalname": "1744347471140_gabriel-lebel-bernier-singles2.jpg",
+        "encoding": "7bit",
+        "mimetype": "image/jpeg",
+        "destination": "uploads",
+        "filename": "1744347471140_gabriel-lebel-bernier-singles2.jpg",
+        "path": "uploads\\1744347471140_gabriel-lebel-bernier-singles2.jpg",
+        "size": 404933
+    }
+}
+
+studentData: [
+  {
+    firstName: 'erdfskbj',
+    lastName: 'lksndvm',
+    email: 'reeeb@jsbdf.com',
+    contactNo: '234872467',
+    dateOfBirth: '2004-04-04',
+    studentId: 324,
+    gender: 'Male',
+    address: 'relmgjl',
+    country: 2,
+    state: 867,
+    city: 16160,
+    profile: {
+      fieldname: 'profile',
+      originalname: '1744351955144_gabriel-lebel-bernier-singles2.jpg',
+      encoding: '7bit',
+      mimetype: 'image/jpeg',
+      destination: 'uploads',
+      filename: '1744351955144_gabriel-lebel-bernier-singles2.jpg',
+      path: 'uploads\\1744351955144_gabriel-lebel-bernier-singles2.jpg',
+      size: 404933
+    }
+  }
+]
+
+Before optimization: 
+async function createOptions(data, element, name) {
+  if (!data.length) {
+    console.error(`No ${name} available.`);
+    element.innerHTML =
+      `<option value="">No ${name} available</option>`;
+    element.disabled = true;
+    return false;
+  }
+  element.innerHTML = !data.length ? `<option value="">No ${name} available</option>` : `<option value="">Select ${name}</option>`; //Default option
+  data.map((elem) => {
+    let option = document.createElement("option");
+    option.value = elem.id;
+    option.textContent = elem.name; // name as text
+    element.appendChild(option);
+  });
+  element.disabled = false;
+  return true;
+}
+
+after optimization: 
+async function createOptions(data, element, name) {
+  element.innerHTML = !data.length ? `<option value="">No ${name} available</option>` : `<option value="">Select ${name}</option>`; //Default option
+  data.map((elem) => {
+    element.innerHTML += `<option value=${elem.id}> ${elem.name} </option>`
+  });
+}
+
+${query ? `?${query}` : ''}
+
+3rd party API for country,state and cities
+//for countries
+const url = "https://api.countrystatecity.in/v1/countries";
+const response = await fetch(url, {
+    headers: { "X-CSCAPI-KEY": api_key },
+});
+
+//for states
+const url = `https://api.countrystatecity.in/v1/countries/${countryCode}/states`;
+const response = await fetch(url, {
+    headers: { "X-CSCAPI-KEY": api_key },
+});
+
+//for cities
+const url = `https://api.countrystatecity.in/v1/countries/${countryCode}/states/${stateCode}/cities`;
+const response = await fetch(url, {
+    headers: { "X-CSCAPI-KEY": api_key },
+});
+
+// id ? getData(id) : document.addEventListener("DOMContentLoaded", getAllCountries);
+
+// Fetch and populate country, state, and city dropdowns
+selectCountry.addEventListener("change", function () {
+  countryId = this.value;
+  selectState.innerHTML = '<option value="">Select State</option>';
+  selectCity.innerHTML = '<option value="">Select City</option>';
+  getAllStates(countryId);
+});
+selectState.addEventListener("change", function () {
+  const stateId = this.value;
+  selectCity.innerHTML = '<option value="">Select City</option>';
+  getAllCities(countryId, stateId);
+});
+
+async function getAllCountries() {
+  try {
+    const url = "http://localhost:5000/user/get/countries";
+    let { countries } = await fetchReq(url, "GET");
+    console.log("~ getAllCountries ~ countries:", countries)
+    await createOptions(countries, selectCountry, 'countries');
+    return true;
+
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+}
+
+async function getAllStates(countryId) {
+  try {
+    const url = `http://localhost:5000/user/get/states?countryId=${countryId}`;
+    const { states } = await fetchReq(url, "GET");
+    await createOptions(states, selectState, 'states');
+    return true;
+
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+}
+
+async function getAllCities(countryId, stateId) {
+  try {
+    const url = `http://localhost:5000/user/get/cities?countryId=${countryId}&stateId=${stateId}`;
+    const { cities } = await fetchReq(url, "GET");
+    await createOptions(cities, selectCity, 'cities');
+    return true;
+
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+}
+
+async function createOptions(data, element, name) {
+  element.innerHTML = !data.length ? `<option value="">No ${name} available</option>` : `<option value="">Select ${name}</option>`; //Default option
+  data.map((elem) => {
+    element.innerHTML += `<option value=${elem.id}> ${elem.name} </option>`
+  });
+}
+
+
+if (!dateOfBirth.value || isNaN(Date.parse(dateOfBirth.value))) {
+    setError(dobError_msg, "*Invalid date of birth");
+  } else {
+    const dobDate = new Date(dateOfBirth.value);
+    const today = new Date();
+    if (dobDate > today) {
+      setError(dobError_msg, "*Date of birth cannot be in the future");
+    } else {
+      dobError_msg.textContent = "";
+    }
+  }
+
+  let lastValidFile = null;
+
+inputProfile.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+
+  if (!file) {
+    // Cancelled dialog, don't touch anything
+    return;
+  }
+
+  if (!validateFile(file)) {
+    inputProfile.value = "";
+    preview.innerHTML = "";
+    lastValidFile = null;
+    return;
+  }
+
+  lastValidFile = file;
+  preview.innerHTML = "";
+
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(file);
+  img.classList.add("setImg");
+  preview.appendChild(img);
+});
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const formData = new FormData(form);
+
+  if (!formData.get("profile") && lastValidFile) {
+    // Manually append last selected file
+    formData.append("profile", lastValidFile);
+  }
+
+  // Submit with fetch
+  fetch("/submit/formData", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+    });
+});
+
+
+// to access the radio button
+const radios = document.querySelectorAll('input[name="gender"]');
+radios.forEach(radio => {
+    radio.addEventListener('change', () => {
+        if (radio.checked) {
+            console.log(radio.value);
+        }
+    });
+});
+
+const uploadProfile = multer({
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB limit
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type. Only JPEG and PNG are allowed.'));
+        }
+    }
+});
+
+// Handle Profile Picture
+    // const formData = new FormData();
+    // const file = inputProfile.files[0];
+    // const defaultImage = 'default_userImage.webp';
+
+    // const fileToUpload = file ? file : new File([], defaultImage);
+    // console.log("fileToUpload: ", fileToUpload);
+    // formData.append("profile", fileToUpload, `${Date.now()}_${fileToUpload.name}`);
+    // formData.append("formData", JSON.stringify(formDataObj));
+
+// const parentName = document.getElementById('parentName');
+// const parentNameError_msg = document.getElementById('parentNameError');
+// const parentRelation = document.getElementById('parentRelation');
+// const parentRelError_msg = document.getElementById('parentRelError');
+// const parentContactNo = document.getElementById('parentContactNo');
+// const parentContactNoError_msg = document.getElementById('parentContactNoError');
+// const parentEmail = document.getElementById('parentEmail');
+// const parentEmailError_msg = document.getElementById('parentEmailError');
+
+< !--Parent and Guardian Information
+    < fieldset class="scheduler-border-2" >
+                        <legend class="scheduler-border-2">Parent/Guardian Info :</legend><br>
+                        <label for="parentName">Parent/Guardian Name :</label>
+                        <input type="text" class="form-control" id="parentName" placeholder="Enter Name here...." autocomplete="off">
+                        <span id="parentNameError" class="error_msg"></span>
+
+                        <div id="parentInfo">
+                            <div class="rel">
+                                <label for="parentRelation">Relatioship to student :</label>
+                                <input type="text" id="parentRelation" name="relation" class="form-control input" placeholder="Ex: Father" autocomplete="off" required>
+                                <span id="parentRelError" class="error_msg"></span>
+                            </div>
+                            <div class="contactNo">
+                                <label for="parentContactNo">Contact No. :</label>
+                                <input type="tel" id="parentContactNo" class="form-control input" placeholder="1123445567" autocomplete="off">
+                                <span id="parentContactNoError" class="error_msg"></span>
+                            </div>
+                            <div class="emailAddress">
+                                <label for="parentEmail">Email :</label>
+                                <input type="email" id="parentEmail" class="form-control input" placeholder="abc@gmail.com" autocomplete="off">
+                                <span id="parentEmailError" class="error_msg"></span>
+                            </div>
+                        </div>
+                    </fieldset> -->
+
+ // Validate Parent/Guardian Name
+  // if (!parentName.value.trim()) {
+  //     setError(parentNameError_msg, '*Parent/Guardian name is required');
+  // } else if (parentName.value.length < 2 || parentName.value.length > 30) {
+  //     setError(parentNameError_msg, '*Parent Name must be between 2 and 30 characters');
+  // } else {
+  //     parentNameError_msg.textContent = "";
+  // }
+
+  // // Validate Parent/Guardian contact no.
+  // if (!parentContactNo.value.trim()) {
+  //     setError(parentContactNoError_msg, '*Contact number is required');
+  // } else if (!ph_Pattern.test(parentContactNo.value)) {
+  //     setError(parentContactNoError_msg, '*Invalid contact number');
+  // } else {
+  //     parentContactNoError_msg.textContent = "";
+  // }
+
+
+  let lastValidFile = null; // To store the last successfully selected valid file
+
+// Trigger file selection dialog when user clicks "Click Here"
+inputProfileBtn.addEventListener("click", (e) => {
+  e.preventDefault(); // Prevent page navigation or form submission
+  inputProfile.click(); // Programmatically open file dialog
+});
+
+// Handle file selection
+inputProfile.addEventListener("change", handleFileSelection);
+
+function handleFileSelection(event) {
+  const file = event.target.files[0];
+
+  // If user cancels the dialog, do nothing
+  if (!file) return;
+
+  // Validate the file (type and size)
+  if (!validateFile(file)) {
+    inputProfile.value = ""; // Clear input if invalid
+    preview.innerHTML = "";  // Clear any preview
+    lastValidFile = null;    // Clear stored file
+    return;
+  }
+
+  lastValidFile = file;        // Store the valid file
+  preview.innerHTML = "";      // Clear old preview
+
+  // Create and display image preview
+  const img = document.createElement("img");
+  img.classList.add("setImg");
+  img.src = URL.createObjectURL(file);
+
+  const fileContainer = document.createElement("div");
+  fileContainer.classList.add("fileContainer");
+  fileContainer.appendChild(img);
+
+  preview.appendChild(fileContainer);
+}
+
+// Validate file type and size
+function validateFile(file) {
+  const validTypes = ["image/jpeg", "image/png", "image/jpg"];
+  const maxSize = 5 * 1024 * 1024; // 5MB
+
+  // Check file type
+  if (!validTypes.includes(file.type)) {
+    profileError_msg.textContent = "Invalid file type. Please select JPG, JPEG, or PNG.";
+    return false;
+  }
+
+  // Check file size
+  if (file.size > maxSize) {
+    profileError_msg.textContent = "File size exceeds 5MB. Please choose a smaller image.";
+    return false;
+  }
+
+  profileError_msg.textContent = ""; // Clear previous error
+  return true;
+}
+
+// Optional: If you're submitting via JavaScript (not native form), handle form submission like this
+form.addEventListener("submit", function (e) {
+  e.preventDefault(); // Prevent default form submission
+
+  const formData = new FormData(form);
+
+  // If no file is selected but a previous one exists, append it manually
+  if (!formData.get("profile") && lastValidFile) {
+    formData.append("profile", lastValidFile);
+  }
+
+  // Send data to backend using fetch
+  fetch("/submit/formData", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+    });
+});
+
+
+
+
+India states
+{
+        "id": 4006,
+        "name": "Meghalaya",
+        "code": "ML",
+        "countryId": 3
+    },
+    {
+        "id": 4007,
+        "name": "Haryana",
+        "code": "HR",
+        "countryId": 3
+    },
+    {
+        "id": 4008,
+        "name": "Maharashtra",
+        "code": "MH",
+        "countryId": 3
+    },
+    {
+        "id": 4009,
+        "name": "Goa",
+        "code": "GA",
+        "countryId": 3
+    },
+    {
+        "id": 4010,
+        "name": "Manipur",
+        "code": "MN",
+        "countryId": 3
+    },
+    {
+        "id": 4011,
+        "name": "Puducherry",
+        "code": "PY",
+        "countryId": 3
+    },
+    {
+        "id": 4012,
+        "name": "Telangana",
+        "code": "TG",
+        "countryId": 3
+    },
+    {
+        "id": 4013,
+        "name": "Odisha",
+        "code": "OR",
+        "countryId": 3
+    },
+    {
+        "id": 4014,
+        "name": "Rajasthan",
+        "code": "RJ",
+        "countryId": 3
+    },
+    {
+        "id": 4015,
+        "name": "Punjab",
+        "code": "PB",
+        "countryId": 3
+    },
+    {
+        "id": 4016,
+        "name": "Uttarakhand",
+        "code": "UT",
+        "countryId": 3
+    },
+    {
+        "id": 4017,
+        "name": "Andhra Pradesh",
+        "code": "AP",
+        "countryId": 3
+    },
+    {
+        "id": 4018,
+        "name": "Nagaland",
+        "code": "NL",
+        "countryId": 3
+    },
+    {
+        "id": 4019,
+        "name": "Lakshadweep",
+        "code": "LD",
+        "countryId": 3
+    },
+    {
+        "id": 4020,
+        "name": "Himachal Pradesh",
+        "code": "HP",
+        "countryId": 3
+    },
+    {
+        "id": 4021,
+        "name": "Delhi",
+        "code": "DL",
+        "countryId": 3
+    },
+    {
+        "id": 4022,
+        "name": "Uttar Pradesh",
+        "code": "UP",
+        "countryId": 3
+    },
+    {
+        "id": 4023,
+        "name": "Andaman and Nicobar Islands",
+        "code": "AN",
+        "countryId": 3
+    },
+    {
+        "id": 4024,
+        "name": "Arunachal Pradesh",
+        "code": "AR",
+        "countryId": 3
+    },
+    {
+        "id": 4025,
+        "name": "Jharkhand",
+        "code": "JH",
+        "countryId": 3
+    },
+    {
+        "id": 4026,
+        "name": "Karnataka",
+        "code": "KA",
+        "countryId": 3
+    },
+    {
+        "id": 4027,
+        "name": "Assam",
+        "code": "AS",
+        "countryId": 3
+    },
+    {
+        "id": 4028,
+        "name": "Kerala",
+        "code": "KL",
+        "countryId": 3
+    },
+    {
+        "id": 4029,
+        "name": "Jammu and Kashmir",
+        "code": "JK",
+        "countryId": 3
+    },
+    {
+        "id": 4030,
+        "name": "Gujarat",
+        "code": "GJ",
+        "countryId": 3
+    },
+    {
+        "id": 4031,
+        "name": "Chandigarh",
+        "code": "CH",
+        "countryId": 3
+    },
+    {
+        "id": 4033,
+        "name": "Dadra and Nagar Haveli and Daman and Diu",
+        "code": "DH",
+        "countryId": 3
+    },
+    {
+        "id": 4034,
+        "name": "Sikkim",
+        "code": "SK",
+        "countryId": 3
+    },
+    {
+        "id": 4035,
+        "name": "Tamil Nadu",
+        "code": "TN",
+        "countryId": 3
+    },
+    {
+        "id": 4036,
+        "name": "Mizoram",
+        "code": "MZ",
+        "countryId": 3
+    },
+    {
+        "id": 4037,
+        "name": "Bihar",
+        "code": "BR",
+        "countryId": 3
+    },
+    {
+        "id": 4038,
+        "name": "Tripura",
+        "code": "TR",
+        "countryId": 3
+    },
+    {
+        "id": 4039,
+        "name": "Madhya Pradesh",
+        "code": "MP",
+        "countryId": 3
+    },
+    {
+        "id": 4040,
+        "name": "Chhattisgarh",
+        "code": "CT",
+        "countryId": 3
+    },
+    {
+        "id": 4852,
+        "name": "Ladakh",
+        "code": "LA",
+        "countryId": 3
+    },
+    {
+        "id": 4853,
+        "name": "West Bengal",
+        "code": "WB",
+        "countryId": 3
+    },
+
+NewZealand states:
+{
+        "id": 4059,
+        "name": "Northland Region",
+        "code": "NTL",
+        "countryId": 4
+    },
+    {
+        "id": 4060,
+        "name": "Manawatu-Wanganui Region",
+        "code": "MWT",
+        "countryId": 4
+    },
+    {
+        "id": 4061,
+        "name": "Waikato Region",
+        "code": "WKO",
+        "countryId": 4
+    },
+    {
+        "id": 4062,
+        "name": "Otago Region",
+        "code": "OTA",
+        "countryId": 4
+    },
+    {
+        "id": 4063,
+        "name": "Marlborough Region",
+        "code": "MBH",
+        "countryId": 4
+    },
+    {
+        "id": 4064,
+        "name": "West Coast Region",
+        "code": "WTC",
+        "countryId": 4
+    },
+    {
+        "id": 4065,
+        "name": "Wellington Region",
+        "code": "WGN",
+        "countryId": 4
+    },
+    {
+        "id": 4066,
+        "name": "Canterbury Region",
+        "code": "CAN",
+        "countryId": 4
+    },
+    {
+        "id": 4067,
+        "name": "Chatham Islands",
+        "code": "CIT",
+        "countryId": 4
+    },
+    {
+        "id": 4068,
+        "name": "Gisborne District",
+        "code": "GIS",
+        "countryId": 4
+    },
+    {
+        "id": 4069,
+        "name": "Taranaki Region",
+        "code": "TKI",
+        "countryId": 4
+    },
+    {
+        "id": 4070,
+        "name": "Nelson Region",
+        "code": "NSN",
+        "countryId": 4
+    },
+    {
+        "id": 4071,
+        "name": "Southland Region",
+        "code": "STL",
+        "countryId": 4
+    },
+    {
+        "id": 4072,
+        "name": "Auckland Region",
+        "code": "AUK",
+        "countryId": 4
+    },
+    {
+        "id": 4073,
+        "name": "Tasman District",
+        "code": "TAS",
+        "countryId": 4
+    },
+    {
+        "id": 4074,
+        "name": "Bay of Plenty Region",
+        "code": "BOP",
+        "countryId": 4
+    },
+    {
+        "id": 4075,
+        "name": "Hawke's Bay Region",
+        "code": "HKB",
+        "countryId": 4
+    }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  id ? getData(id) : fetchAndPopulate('countries');
+
+  selectCountry.addEventListener("change", function () {
+    countryId = this.value;
+    resetDropdown(selectState, 'State');
+    resetDropdown(selectCity, 'City');
+    fetchAndPopulate('states', { countryId });
+  });
+
+  selectState.addEventListener("change", function () {
+    const stateId = this.value;
+    resetDropdown(selectCity, 'City');
+    fetchAndPopulate('cities', { countryId, stateId });
+  });
+});
+
+// Reusable dropdown fetcher
+async function fetchAndPopulate(type, params = {}) {
+  try {
+    let query = new URLSearchParams(params).toString();
+    const url = `http://localhost:5000/user/get/${type}${query ? `?${query}` : ''}`;
+    const data = await fetchReq(url, "GET");
+
+    const elementMap = {
+      countries: selectCountry,
+      states: selectState,
+      cities: selectCity,
+    };
+
+    if (data && data[type]) {
+      await createOptions(data[type], elementMap[type], type);
+    }
+  } catch (error) {
+    console.log(`Error loading ${type}:`, error);
+  }
+}
+
+// Reset dropdown helper
+function resetDropdown(dropdown, label) {
+  dropdown.innerHTML = `<option value="">Select ${label}</option>`;
+}
+
+// Generic fetch
+async function fetchReq(url, reqMethod, formData = null) {
+  try {
+    const options = { method: reqMethod };
+    if (reqMethod.toUpperCase() !== "GET" && formData) {
+      options.body = formData;
+    }
+
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error(`Response status: ${response.status}`);
+
+    const data = await response.json();
+    return data.success ? data : null;
+  } catch (error) {
+    console.log("Error:", error);
+  }
+}
+
+// Generic dropdown option creator
+async function createOptions(data, element, name) {
+  element.innerHTML = !data.length
+    ? `<option value="">No ${name} available</option>`
+    : `<option value="">Select ${name}</option>`;
+
+  data.forEach(({ id, name }) => {
+    element.innerHTML += `<option value="${id}">${name}</option>`;
+  });
+}
+
+form.html old code: 
+<!-- <div id="forMargin" class="input-group mb-3">
+                            <span class="input-group-text">+91</span>
+                            <div class="form-floating">
+                                <input type="tel" patter="[0-9]{10}" class="form-control" id="contactNo"
+                                    placeholder="contact Number" autocomplete="off">
+                                <label for="contactNo">Contact Number</label>
+                            </div>
+                        </div>
+                        <div id="forMargin" class="input-group mb-3 dateOfBirth">
+                            <label for="dateOfBirth" class="dob">Date of Birth :</label>
+                            <input type="date" id="dateOfBirth" class="form-control" name="birthday" autocomplete="off">
+                        </div> -->
+
+<!-- <div class="col-md">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="studentId" placeholder="Ex-2345678"
+                                    autocomplete="off">
+                                <label for="StudentId">Student Id :</label>
+                            </div>
+                        </div> -->
+<!-- <div class="col-md">
+                            <div>
+                                <p class="form-control">Please Select your gender</p>
+                                <input type="radio" id="male" name="gender" value="Male" class="radio">
+                                <label for="male">Male</label>
+                                <input type="radio" id="female" name="gender" value="Female" class="radio">
+                                <label for="female">Female</label>
+                                <input type="radio" id="other" name="gender" value="other" class="radio">
+                                <label for="other">Other</label>
+                            </div>
+                        </div> -->
+<!-- <label for="address">Street Address :</label>
+                        <input type="text" class="form-control parentName" placeholder="Street Address...." id="address"
+                            autocomplete="off"> -->
+
+<!-- <div class="country">
+                                <label for="inputCountry">Country :</label>
+                                <select type="text" id="inputCountry" class="form-control" required>
+                                    <option value="">Select Country</option>
+                                </select>
+                                <span id="countryError" class="error_msg"></span>
+                            </div>
+                            <div class="state">
+                                <label for="inputState">State :</label>
+                                <select id="inputState" class="form-control" required>
+                                    <option value="">Select State</option>
+                                </select>
+                                <span id="state_error" class="error_msg"></span>
+                            </div>
+                            <div class="city">
+                                <label for="inputCity">City :</label>
+                                <select id="inputCity" class="form-control" required>
+                                    <option value="">Select City</option>
+                                </select>
+                                <span id="city_error" class="error_msg"></span>
+                            </div>
+                        </div> -->
